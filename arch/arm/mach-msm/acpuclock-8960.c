@@ -1207,7 +1207,7 @@ static struct acpu_level *acpu_freq_tbl_8930aa_pvs[NUM_PVS] __initdata = {
 
 static struct acpu_level *max_acpu_level;
 
-static unsigned long acpuclk_8960_get_rate(int cpu)
+unsigned long acpuclk_8960_get_rate(int cpu)
 {
 	return scalable[cpu].current_speed->khz;
 }
