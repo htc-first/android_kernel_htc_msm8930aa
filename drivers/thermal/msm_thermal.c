@@ -24,6 +24,8 @@
 #include <mach/cpufreq.h>
 #include <mach/perflock.h>
 
+#define DEF_TEMP_SENSOR      0
+
 static int enabled;
 static struct msm_thermal_data msm_thermal_info;
 static uint32_t limited_max_freq = MSM_CPUFREQ_NO_LIMIT;
@@ -59,12 +61,13 @@ static void check_temp(struct work_struct *work)
 	int cpu = 0;
 	int ret = 0;
 
-	tsens_dev.sensor_num = msm_thermal_info.sensor_id;
+	tsens_dev.sensor_num = DEF_TEMP_SENSOR;
 	ret = tsens_get_temp(&tsens_dev, &temp);
 	if (ret) {
-		pr_debug("msm_thermal: Unable to read TSENS sensor %d\n",
+		pr_info("msm_thermal: Unable to read TSENS sensor %d\n",
 				tsens_dev.sensor_num);
 		goto reschedule;
+pr_info("msm_thermal: current temp: %lu", temp);
 	} else
 		pr_info("msm_thermal: TSENS sensor %d (%ld C)\n",
 				tsens_dev.sensor_num, temp);
@@ -85,7 +88,7 @@ static void check_temp(struct work_struct *work)
 	for_each_possible_cpu(cpu) {
 		ret = update_cpu_max_freq(cpu, max_freq);
 		if (ret)
-			pr_debug("Unable to limit cpu%d max freq to %d\n",
+			pr_info("Unable to limit cpu%d max freq to %d\n",
 					cpu, max_freq);
 	}
 
