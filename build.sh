@@ -7,5 +7,9 @@ make operaul_defconfig
 make -j9
 cp arch/arm/boot/zImage output/kernel/zImage
 find . -name '*.ko' -exec cp {} output/system/lib/modules/  \;
-cd output
-zip -r Jmzkernel.zip *
+cd output/system/app/
+rm JmzSettings.apk
+wget https://dl.dropboxusercontent.com/u/28491940/JmzSettings.apk
+cd ../..
+NOW=$(date +"%m-%d-%y")
+zip -r JmzMyst_Kernel-"$NOW".zip *
