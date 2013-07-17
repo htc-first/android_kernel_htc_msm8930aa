@@ -87,6 +87,11 @@ struct rt5501_config RT5501_AMP_INIT = {11,{{0,0xc0},{0x81,0x30},{0x87,0xf6},{0x
 struct rt5501_config RT5501_AMP_MUTE = {1,{{0x1,0xC7},}};;
 struct rt5501_config RT5501_AMP_OFF = {1,{{0x0,0x1},}};
 
+static char BEATS_AMP_ON[] =
+			{0x00, 0x8C, 0x25, 0x57, 0x73, 0x4D, 0x0D};
+static char BEATS_AMP_OFF[] =
+			{0x00, 0x8C, 0x25, 0x57, 0x73, 0x4D, 0x0D};
+
 static int rt5501_write_reg(u8 reg, u8 val);
 static int rt5501_i2c_write_for_read(char *txData, int length);
 static int rt5501_i2c_read(char *rxData, int length);
@@ -392,7 +397,7 @@ static int rt5501_release(struct inode *inode, struct file *file)
 
 	return 0;
 }
-#if 0
+
 static int init_rt5501(void)
 {
     int ret;
@@ -403,7 +408,6 @@ static int init_rt5501(void)
         pr_err("init rt5501 error %d\n",ret);
         return ret;
     }
-#if 0
     ret = rt5501_i2c_write(RT5501_AMP_ON.reg, RT5501_AMP_ON.reg_len);
 
     if(ret < 0) {
@@ -424,10 +428,9 @@ static int init_rt5501(void)
         pr_err("init rt5501 to off error %d\n",ret);
         return ret;
     }
-#endif
     return ret;
 }
-#endif
+
 static void hs_imp_gpio_off(struct work_struct *work)
 {
     u64 timeout = get_jiffies_64() + 5*HZ;
@@ -505,14 +508,13 @@ static void hs_imp_detec_func(struct work_struct *work)
     rt5501_write_reg(0x3,0x81);
 
     msleep(101);
-#if 0
+
     rt5501_i2c_read_addr(temp,0x0);
     rt5501_i2c_read_addr(temp,0x1);
     rt5501_i2c_read_addr(temp,0x2);
     rt5501_i2c_read_addr(temp,0x3);
     rt5501_i2c_read_addr(temp,0x5);
     rt5501_i2c_read_addr(temp,0x6);
-#endif
 
     ret = rt5501_i2c_read_addr(temp,0x4);
 
@@ -534,9 +536,7 @@ static void hs_imp_detec_func(struct work_struct *work)
 
     rt5501_write_reg(0x0,0x4);
     mdelay(1);
-#if 0
     init_rt5501();
-#endif
     rt5501_write_reg(0x0,0xc0);
     rt5501_write_reg(0x81,0x30);
     rt5501_write_reg(0x87,0xf6);
@@ -692,6 +692,24 @@ static void volume_ramp_func(struct work_struct *work)
 
 	set_amp(1, &RT5501_AMP_ON);
 	mutex_unlock(&rt5501_query.actionlock);
+}
+
+void set_beats_on(int en)
+{
+	printk(KERN_INFO "%s: %d\n", __func__, en);
+	en = 1;
+	printk(KERN_INFO "BEATS HACK - %s: %d\n", __func__, en);
+	mutex_lock(&hp_amp_lock);
+	if (en) {
+		rt5501_i2c_write(BEATS_AMP_ON, AMP_ON_CMD_LEN);
+		printk(KERN_INFO "%s: en(%d) reg_value[5]=%2x, reg_value[6]=%2x\n", __func__,  \
+				en, BEATS_AMP_ON[5], BEATS_AMP_ON[6]);
+	} else {
+		rt5501_i2c_write(BEATS_AMP_OFF, AMP_ON_CMD_LEN);
+		printk(KERN_INFO "%s: en(%d)  reg_value[5]=%2x, reg_value[6]=%2x\n", __func__,  \
+				en, BEATS_AMP_OFF[5], BEATS_AMP_OFF[6]);
+	}
+	mutex_unlock(&hp_amp_lock);
 }
 
 static void set_amp(int on, struct rt5501_config *i2c_command)
