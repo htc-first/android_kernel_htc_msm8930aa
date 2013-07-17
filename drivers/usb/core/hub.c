@@ -611,7 +611,7 @@ static int hub_usb3_port_disable(struct usb_hub *hub, int port1)
 {
 	int ret;
 	int total_time;
-	u16 portchange, portstatus;
+	u16 portchange = 0, portstatus;
 
 	if (!hub_is_superspeed(hub->hdev))
 		return -EINVAL;
@@ -2368,7 +2368,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
 	struct usb_hub	*hub = hdev_to_hub(udev->parent);
 	int		port1 = udev->portnum;
 	int		status;
-	u16		portchange, portstatus;
+	u16		portchange = 0, portstatus = 0;
 
 	
 	status = hub_port_status(hub, port1, &portstatus, &portchange);
@@ -3259,8 +3259,8 @@ static void hub_events(void)
 	struct device *hub_dev;
 	u16 hubstatus;
 	u16 hubchange;
-	u16 portstatus;
-	u16 portchange;
+	u16 portstatus = 0;
+	u16 portchange = 0;
 	int i, ret;
 #if defined(CONFIG_USB_PEHCI_HCD) || defined(CONFIG_USB_PEHCI_HCD_MODULE)
 	int j;

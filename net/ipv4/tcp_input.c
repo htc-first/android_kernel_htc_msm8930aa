@@ -3445,20 +3445,20 @@ new_sack:
 
 static void tcp_sack_remove(struct tcp_sock *tp)
 {
-	struct tcp_sack_block *sp = &tp->selective_acks[0];
+	struct tcp_sack_block *sp = &tp->selective_acks[1];
 	int num_sacks = tp->rx_opt.num_sacks;
-	int this_sack;
+	int this_sack ;
 
 	
 	if (skb_queue_empty(&tp->out_of_order_queue)) {
 		tp->rx_opt.num_sacks = 0;
 		return;
 	}
-
+    BUG_ON(num_sacks > 4);
 	for (this_sack = 0; this_sack < num_sacks;) {
 		
 		if (!before(tp->rcv_nxt, sp->start_seq)) {
-			int i;
+			int i = 0;
 
 			
 			WARN_ON(before(tp->rcv_nxt, sp->end_seq));
