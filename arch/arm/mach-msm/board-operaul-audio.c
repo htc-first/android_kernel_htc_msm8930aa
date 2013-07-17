@@ -1257,6 +1257,19 @@ struct snd_soc_card snd_soc_card_msm8930 = {
 
 static struct platform_device *msm8930_snd_device;
 
+
+int opera_support_beats(void)
+{
+    return 1;
+}
+
+void opera_enable_beats(int en)
+{
+  en = 1;
+  pr_aud_info("%s: %d\n", __func__, en);
+  set_beats_on(en);
+}
+
 void opera_set_q6_effect_mode(int mode)
 {
 	pr_info("%s: mode %d\n", __func__, mode);

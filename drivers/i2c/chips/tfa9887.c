@@ -306,6 +306,7 @@ void set_tfa9887_spkamp(int en, int dsp_mode)
 		}
 	}
 	mutex_unlock(&spk_amp_lock);
+
 }
 
 static long tfa9887_ioctl(struct file *file, unsigned int cmd,
