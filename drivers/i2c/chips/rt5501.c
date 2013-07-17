@@ -701,11 +701,11 @@ void set_beats_on(int en)
 	printk(KERN_INFO "BEATS HACK - %s: %d\n", __func__, en);
 	mutex_lock(&hp_amp_lock);
 	if (en) {
-		rt5501_i2c_write(BEATS_AMP_ON, AMP_ON_CMD_LEN);
+		rt5501_i2c_write_for_read(BEATS_AMP_ON, AMP_ON_CMD_LEN);
 		printk(KERN_INFO "%s: en(%d) reg_value[5]=%2x, reg_value[6]=%2x\n", __func__,  \
 				en, BEATS_AMP_ON[5], BEATS_AMP_ON[6]);
 	} else {
-		rt5501_i2c_write(BEATS_AMP_OFF, AMP_ON_CMD_LEN);
+		rt5501_i2c_write_for_read(BEATS_AMP_OFF, AMP_ON_CMD_LEN);
 		printk(KERN_INFO "%s: en(%d)  reg_value[5]=%2x, reg_value[6]=%2x\n", __func__,  \
 				en, BEATS_AMP_OFF[5], BEATS_AMP_OFF[6]);
 	}
