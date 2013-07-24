@@ -1011,7 +1011,7 @@ config FB_MSM_ESD_WORKAROUND
 
 config FB_MSM_CABC_LEVEL_CONTROL
 	bool "CABC LEVEL CONTROL"
-	default n
+	default y
 	---help---
 	  Use attribute to switch CABC level.
 
