@@ -108,7 +108,7 @@ struct cpufreq_policy {
 
 #define CPUFREQ_PRECHANGE	(0)
 #define CPUFREQ_POSTCHANGE	(1)
-#define CPUFREQ_RESUMECHANGE	(8)
+#define CPUFREQ_RESUMECHANGE	(8)int boost
 #define CPUFREQ_SUSPENDCHANGE	(9)
 
 struct cpufreq_freqs {
@@ -175,7 +175,6 @@ void unlock_policy_rwsem_write(int cpu);
 extern void ondemand_boost_cpu(int boost);
 #endif
 
-extern DEFINE_PER_CPU(int, cpufreq_init_done);
 
 
 #define CPUFREQ_RELATION_L 0  
