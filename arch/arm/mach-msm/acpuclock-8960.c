@@ -964,7 +964,7 @@ static struct l2_level l2_freq_tbl_8930[] = {
 	[14] = { { 1080000, HFPLL, 1, 0, 0x28 }, LVL_HIGH, 1150000, 7 },
 	[15] = { { 1134000, HFPLL, 1, 0, 0x2A }, LVL_HIGH, 1150000, 7 },
 	[16] = { { 1188000, HFPLL, 1, 0, 0x2C }, LVL_HIGH, 1150000, 7 },
-    [17] = { { 1215000, HFPLL, 1, 0, 0x2D ), LVL_HIGH, 1150000, 7 },
+    [17] = { { 1215000, HFPLL, 1, 0, 0x2D }, LVL_HIGH, 1150000, 7 },
 };
 
 static struct acpu_level acpu_freq_tbl_8930_slow[] = {
